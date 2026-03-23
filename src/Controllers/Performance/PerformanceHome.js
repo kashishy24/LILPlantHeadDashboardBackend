@@ -45,4 +45,26 @@ router.get("/GetProdDate", async (req, res) => {
   }
 });
 
+//for Plant Performance
+
+router.get("/Plant-performance", async (req, res) => {
+
+    const filterType = req.query.FilterType || req.query.filterType || "Current";
+
+    try {
+        const pool = await sql.connect();
+
+        const result = await pool.request()
+            .input("FilterType", sql.VarChar, filterType)
+            .execute("Dashboard2_Get_PlantSummary");
+
+        res.json(result.recordset);
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Server Error");
+    }
+
+});
+
 module.exports = router;
